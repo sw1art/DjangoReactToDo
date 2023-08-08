@@ -5,3 +5,4 @@
 __pycache__/
 /migrations/
 Dockerfile
+node_modules
