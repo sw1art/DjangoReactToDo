@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend  # Путь к папке с Django проектом
+      dockerfile: Dockerfile  # Имя Dockerfile для бэкенда
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"  # Порт хоста : Порт контейнера
+    volumes:
+      - ./backend:/app  # Монтирование папки с Django проектом
+    env_file:
+      - ./backend/.env-backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend_to_do.settings  # Установка переменной окружения для Django
+    depends_on:
+      - postgres  # Зависимость от контейнера PostgreSQL
+
+  # frontend:
+  #   build:
+  #     context: ./frontend 
+  #     dockerfile: Dockerfile 
+  #   ports:
+  #     - "3000:3000" 
+  #   volumes:
+  #     - ./frontend:/app  
+  #   environment:
+  #     - NODE_ENV=development 
+
+  postgres:
+    container_name: postgres
+    image: postgres:15  # Используем образ PostgreSQL версии 13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"  # Порт хоста : Порт контейнера
+volumes:
+  postgresdata: 
